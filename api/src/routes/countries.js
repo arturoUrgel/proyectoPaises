@@ -78,9 +78,8 @@ router.get("/", async (req, res) => {
     res.send(
       name
         ? await nameFilter(name)
-        : dataCountry.map((ele) => {
-            return [ele.name, ele.population];
-          })
+        : dataCountry
+          
     );
   } catch (error) {
     res.status(400).json({ error: error });
