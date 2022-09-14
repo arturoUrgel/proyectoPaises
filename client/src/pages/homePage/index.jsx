@@ -16,7 +16,7 @@ const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  /* align-items: stretch; */
+  /* align-items: flex-start */
 `;
 
 const SearchData = styled.div`
@@ -35,8 +35,7 @@ export default function Home() {
   const allCountries = useSelector((state) => state.countries);
   const [displayedCountries, setDisplayedCountries] = useState([]);
   const [itemsPerPages, setItemsPerPages] = useState(9);
-  const [initialItem, setInitialItem] = useState(0);
-  const [lastItem, setLastItem] = useState(9);
+  const [initialItem, setInitialItem] = useState(9);
   const [continents, setContinents] = useState({
     Africa: true,
     Antarctica: true,
@@ -56,6 +55,11 @@ export default function Home() {
 
   const onCheckboxClick = (name, checked) => {
     setContinents({ ...continents, [name]: checked });
+  };
+
+  const handlerClick = (currentPage) => {
+    setInitialItem(currentPage)
+    /* window.scrollTo(0, 0) */
   };
 
   const filterAll = () => {
@@ -78,13 +82,17 @@ export default function Home() {
       <NavBar />
       <SearchData>
         <Filter selected={continents} handler={onCheckboxClick} />
-        <Cards display={displayedCountries.slice(initialItem, lastItem)} />
+        <Cards
+          display={displayedCountries.slice(
+            (initialItem - itemsPerPages),
+            initialItem
+          )}
+        />
       </SearchData>
       <Pagination
         items={displayedCountries.length}
         itemsPerPages={itemsPerPages}
-        setInitialItem={setInitialItem}
-        setLastItem={setLastItem}
+        handlerClick={handlerClick}
       />
     </HomeContainer>
   );

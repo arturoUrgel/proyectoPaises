@@ -1,40 +1,50 @@
 import React from "react";
 import styled from "styled-components";
 
-  const pages = [];
-  let currentPage = 0;
+const Container = styled.div`
+  margin-top: 1rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+`;
+let maxPage;
+let currentPage = 1;
 
-export default function Pagination({
-  items,
-  itemsPerPages,
-  setInitialItem,
-  setLastItem,
-}) {
-
-  for (let i = 0; i < Math.ceil(items / itemsPerPages); i++) {
-    pages.push(i);
-  }
-  const handlerClick = () => {
-    console.log("PREV",currentPage)
-    --currentPage
-    setInitialItem(currentPage * itemsPerPages);
-    setLastItem((currentPage+1) * itemsPerPages);
-    console.log("PREV",currentPage)
-  };
-  const handlerClickNext = () => {
-    console.log("NEXT",currentPage)
-    ++currentPage
-    setInitialItem(currentPage * itemsPerPages);
-    setLastItem((currentPage+1) * itemsPerPages);
-    console.log("NEXT",currentPage)
-    window.scrollTo(0, 0)
+export default function Pagination({ items, itemsPerPages, handlerClick }) {
+  maxPage = Math.ceil(items / itemsPerPages);
+  const handlerLocal = (e) => {
+    e.target.name === "next"
+      ? handlerClick(++currentPage * itemsPerPages)
+      : handlerClick(--currentPage * itemsPerPages);
   };
 
   return (
-    <div>
-      <button onClick={handlerClick}>prev</button>
-      <button onClick={handlerClickNext}>next</button>
-      <div>{currentPage}</div>
-    </div>
+    <Container>
+      {currentPage !== 1 ? (
+        <button name="prev" onClick={handlerLocal}>
+          Prev
+        </button>
+      ) : (
+        false
+      )}
+      {currentPage <= maxPage ? (
+        <div>
+          {" "}
+          {currentPage} de {maxPage} paginas{" "}
+        </div>
+      ) : (
+        false
+      )}
+
+      {currentPage < maxPage ? (
+        <button name="next" onClick={handlerLocal}>
+          next
+        </button>
+      ) : (
+        false
+      )}
+    </Container>
   );
 }

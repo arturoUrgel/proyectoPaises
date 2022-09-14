@@ -11,10 +11,13 @@ const CardContainer = styled.div`
   width: 300px;
   border-style: solid;
   margin-top: 20px;
+  border-radius: 10px;
+  box-shadow: 6px 20px 10px black;
 `;
 
 const CountryName = styled.h3`
   flex: 2;
+  text-align: center;
 `;
 const FlagImage = styled.img`
   flex: 5;
