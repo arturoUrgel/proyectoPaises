@@ -12,7 +12,7 @@ const CardContainer = styled.div`
   border-style: solid;
   margin-top: 20px;
   border-radius: 10px;
-  box-shadow: 6px 20px 10px black;
+  box-shadow: 6px 15px 10px black;
 `;
 
 const CountryName = styled.h3`

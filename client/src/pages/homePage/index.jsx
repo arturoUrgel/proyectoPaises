@@ -16,18 +16,19 @@ const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  /* align-items: flex-start */
+  
 `;
 
 const SearchData = styled.div`
   width: 100%;
   height: 100%;
+  min-height: 100vh;
   background-color: yellow;
   /*   flex: 8; */
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start
 `;
 
 export default function Home() {
