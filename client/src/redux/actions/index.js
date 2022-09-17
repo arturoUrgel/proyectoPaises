@@ -24,3 +24,12 @@ export const getAllCountries = () => (dispatch) => {
       })
     );
 };
+
+export const getCountryDetails = (id) => (dispatch) => {
+  return fetch("http://localhost:3001/countries/" + id)
+    .then((response) => response.json())
+    .then(
+      (data) => dispatch({ type: GET_COUNTRY_DETAIL, payload: data })
+      //console.log(data)
+    );
+};

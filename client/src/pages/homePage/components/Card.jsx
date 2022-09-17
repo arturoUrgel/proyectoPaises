@@ -53,7 +53,7 @@ export default function Card({ id, name, flag, continents }) {
       <CountryName>{name}</CountryName>
       <FlagImage src={flag} alt={name} />
       <p>{`Continente: ${continents}`}</p>
-      <DetailLink to={`/product/${id}`}>{name}</DetailLink>
+      <DetailLink to={`/countries/${id}`}>{name}</DetailLink>
     </CardContainer>
   );
 }

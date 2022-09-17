@@ -2,6 +2,7 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { Link, Redirect } from "react-router-dom";
 import styled from "styled-components";
 
 const SearchInput = styled.input`
@@ -118,7 +119,7 @@ export default function NavBar() {
           setCountrieSearch("");
         }}
         onFocus={(e) => setInputFocus(true)}
-        onBlur={(e) => setInputFocus(false)}
+        onBlur={(e) => setTimeout(() => setInputFocus(false), 200)}
       >
         <div>
           <SearchButton>
@@ -133,25 +134,27 @@ export default function NavBar() {
             autocapitalize="off"
             autocorrect="off"
             spellcheck="false"
-            autocomplete="nope"
+            autoComplete="off"
             tabindex="2"
           />
         </div>
 
-        {search.length > 0 && (
-          inputFocus && <SuggestionList>
+        {search.length > 0 && inputFocus && (
+          <SuggestionList>
             {search.map((ele) => (
-              <SuggestionItem key={ele.id}>
-                <img
-                  src={ele.flag}
-                  style={{
-                    height: "2rem",
-                    paddingRight: "1rem",
-                    width: "3rem",
-                  }}
-                />
-                <span>{ele.name}</span>
-              </SuggestionItem>
+              <Link key={ele.id} to={"/countries/"+ele.id}>
+                <SuggestionItem key={ele.id} onClick={() => Redirect("/")}>
+                  <img
+                    src={ele.flag}
+                    style={{
+                      height: "2rem",
+                      paddingRight: "1rem",
+                      width: "3rem",
+                    }}
+                  />
+                  <span>{ele.name}</span>
+                </SuggestionItem>
+              </Link>
             ))}
           </SuggestionList>
         )}
