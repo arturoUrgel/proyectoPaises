@@ -30,9 +30,12 @@ router.get("/:idPais", async (req, res) => {
     console.log("PASO3");
     respuesta = await Country.findOne({
       where: { id: req.params.idPais.toUpperCase() },
+      include: [Activity],
     });
-    console.log(respuesta);
-    res.send(respuesta ? respuesta : "Pais no disponible");
+    console.log("Respuesta del idPais", respuesta);
+    respuesta
+      ? res.send(respuesta)
+      : res.status(404).send("Error 404, Pais no encontrado");
   } catch (error) {
     res.status(400).json({ error: error });
   }
@@ -75,14 +78,8 @@ router.get("/", async (req, res) => {
       dataCountry = await Country.bulkCreate(dataCountry);
     }
     console.log("PASO3");
-    res.send(
-      name
-        ? await nameFilter(name)
-        : dataCountry
-          
-    );
+    res.send(name ? await nameFilter(name) : dataCountry);
   } catch (error) {
     res.status(400).json({ error: error });
   }
 });
-

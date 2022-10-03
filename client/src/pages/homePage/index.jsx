@@ -37,6 +37,7 @@ export default function Home() {
   const [displayedCountries, setDisplayedCountries] = useState([]);
   const [itemsPerPages, setItemsPerPages] = useState(9);
   const [initialItem, setInitialItem] = useState(9);
+  const [currentPage, setCurrentPage] = useState(1);
   const [continents, setContinents] = useState({
     Africa: true,
     Antarctica: true,
@@ -52,14 +53,17 @@ export default function Home() {
   }, []);
   useEffect(() => {
     filterAll();
+    handlerClick(itemsPerPages,1)
   }, [continents, allCountries]);
 
   const onCheckboxClick = (name, checked) => {
     setContinents({ ...continents, [name]: checked });
   };
 
-  const handlerClick = (currentPage) => {
-    setInitialItem(currentPage)
+  const handlerClick = (currentItems,currentPage) => {
+
+    setInitialItem(currentItems)
+    setCurrentPage(currentPage)
     /* window.scrollTo(0, 0) */
   };
 
@@ -94,6 +98,7 @@ export default function Home() {
         items={displayedCountries.length}
         itemsPerPages={itemsPerPages}
         handlerClick={handlerClick}
+        currentPage={currentPage}
       />
     </HomeContainer>
   );

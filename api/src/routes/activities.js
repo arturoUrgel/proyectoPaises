@@ -23,10 +23,23 @@ router.post("/", async (req, res) => {
 
     res.send(await newActivity.addCountry(selectCountries));
   } catch (error) {
-    console.log("Error postActivity en controller " + error);
+    res.status(400).json({ error: error })
   }
 });
 
-router.get("/",async(req,res)=>{
-  res.send(await Activity.findAll())
-})
+router.get("/", async (req, res) => {
+  try {
+    const respuesta = await Activity.findAll({
+      include: [Country],
+    });
+    res.send(respuesta);
+  } catch (error) {console.log("Error postActivity en controller " + error)}
+});
+
+
+// Change everyone without a last name to "Doe"
+// await User.update({ lastName: "Doe" }, {
+//   where: {
+//     lastName: null
+//   }
+// });

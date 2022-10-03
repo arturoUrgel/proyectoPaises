@@ -10,14 +10,18 @@ const Container = styled.div`
   gap: 2rem;
 `;
 let maxPage;
-let currentPage = 1;
 
-export default function Pagination({ items, itemsPerPages, handlerClick }) {
+export default function Pagination({
+  items,
+  itemsPerPages,
+  handlerClick,
+  currentPage,
+}) {
   maxPage = Math.ceil(items / itemsPerPages);
   const handlerLocal = (e) => {
     e.target.name === "next"
-      ? handlerClick(++currentPage * itemsPerPages)
-      : handlerClick(--currentPage * itemsPerPages);
+      ? handlerClick(++currentPage * itemsPerPages, currentPage)
+      : handlerClick(--currentPage * itemsPerPages, currentPage);
   };
 
   return (

@@ -3,6 +3,7 @@ import { Route } from "react-router-dom";
 import LandingPage from "./pages/landingPage";
 import Home from "./pages/homePage";
 import CountryDetail from "./pages/countryDetail";
+import FormActivity from "./pages/activity/ActivityForm";
 
 function App() {
   return (
@@ -13,10 +14,9 @@ function App() {
       <Route path="/home" component={Home} />
 
       <Route path="/countries/:id" component={CountryDetail} />
+      <Route path="/activities/createActivity" component={FormActivity} />
 
-      <Route path="/activities">
-        <div>Detalle Activities</div>
-      </Route>
+      
     </div>
   );
 }

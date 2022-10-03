@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useHistory } from "react-router-dom";
 
 const CardContainer = styled.div`
   display: flex;
@@ -13,6 +14,11 @@ const CardContainer = styled.div`
   margin-top: 20px;
   border-radius: 10px;
   box-shadow: 6px 15px 10px black;
+  &:hover {
+    cursor: pointer;
+    /* box-shadow: 6px 15px 10px blue; */
+    transform: perspective(2000px) rotateX(0deg) rotateY(10deg) rotateZ(0deg) translateX(-10px) translateY(0px) translateZ(80px);
+  }
 `;
 
 const CountryName = styled.h3`
@@ -25,35 +31,26 @@ const FlagImage = styled.img`
   margin-left: auto;
   margin-right: auto;
   width: 50%;
-  border-style:solid;
+  border-style: solid;
 `;
 const Continents = styled.p`
   flex: 1;
 `;
 
-const DetailLink = styled(Link)`
-  font-size: large;
-  font-family: Arial, Helvetica, sans-serif;
-  text-decoration: none;
-  margin: 10px;
-  flex: 2;
-  &:hover,
-  &:focus {
-    color: blue;
-  }
-  &:active {
-    color: red;
-  }
-`;
+
+const Id = styled.span`
+  
+`
 
 export default function Card({ id, name, flag, continents }) {
   const dispatch = useDispatch();
+  let historyObj = useHistory();
   return (
-    <CardContainer>
+    <CardContainer onClick={()=>historyObj.push("/countries/" + id)}>
+      <Id>{id}</Id>
       <CountryName>{name}</CountryName>
       <FlagImage src={flag} alt={name} />
       <p>{`Continente: ${continents}`}</p>
-      <DetailLink to={`/countries/${id}`}>{name}</DetailLink>
     </CardContainer>
   );
 }

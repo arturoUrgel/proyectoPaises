@@ -2,7 +2,6 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 
 const SearchInput = styled.input`
@@ -31,31 +30,24 @@ const SearchButton = styled.button`
   } */
 `;
 
-const Header = styled.div`
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  background-color: #eafa11;
-  flex: 2;
-`;
-const SearchBar = styled.form`
-  width: 50%;
+const SearchBar = styled.div`
+  width: 80%;
   background-color: white;
   position: absolute;
-  left: 25%;
+  left: 10%;
   border-radius: 2px;
   /* position: relative; */
 `;
 const HeaderContainer = styled.div`
-  width: 100%;
-  height: 80px;
-  background-color: #eafa11;
+  width: 400px;
+  height: 40px;
+  position: relative;
 `;
 const SuggestionList = styled.ul`
-  background-color: lightcyan;
   list-style-type: none;
   padding: 0;
+  max-height: 150px;
+  overflow-y: scroll;
 `;
 
 const SuggestionItem = styled.li`
@@ -77,12 +69,11 @@ const SuggestionItem = styled.li`
   } */
 `;
 
-export default function NavBar() {
+export default function SearchCountries({ handleSubmit, charMin }) {
   const allCountries = useSelector((state) => state.countries);
   const [countrieSearch, setCountrieSearch] = useState("");
   const [search, setSearch] = useState("");
   const [inputFocus, setInputFocus] = useState(false);
-  let historyObj = useHistory();
 
   const handleInputChange = (e) => {
     setCountrieSearch(e.target.value);
@@ -92,11 +83,13 @@ export default function NavBar() {
   }, [countrieSearch]);
 
   const handleSuggestion = () => {
-    if (countrieSearch.length >= 3) {
+    if (countrieSearch.length >= charMin) {
       setSearch(
-        allCountries.filter((ele) =>
-          ele.name.toLowerCase().includes(countrieSearch.toLowerCase())
-        )
+        allCountries
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .filter((ele) =>
+            ele.name.toLowerCase().includes(countrieSearch.toLowerCase())
+          )
       );
     } else {
       setSearch("");
@@ -105,16 +98,12 @@ export default function NavBar() {
 
   return (
     <HeaderContainer>
-      <Header>Listado Paises</Header>
       <SearchBar
         onFocus={(e) => setInputFocus(true)}
         onBlur={(e) => setInputFocus(false)}
         autocomplete="nope"
         onSubmit={(e) => {
           e.preventDefault();
-          search
-            ? historyObj.push("/countries/" + search[0].id)
-            : setCountrieSearch("");
         }}
       >
         <div>
@@ -124,7 +113,7 @@ export default function NavBar() {
           <SearchInput
             type="text"
             name="searchCountries"
-            placeholder="Buscar Paises..."
+            placeholder="Agregar paises..."
             onChange={handleInputChange}
             value={countrieSearch}
             autocapitalize="off"
@@ -137,18 +126,21 @@ export default function NavBar() {
 
         {search.length > 0 && inputFocus && (
           <SuggestionList>
-            {search.sort((a, b) => a.name.localeCompare(b.name)).map((ele) => (
+            {search.map((ele) => (
               <div
                 key={ele.id}
-                onMouseDown={() => historyObj.push("/countries/" + ele.id)}
+                onMouseDown={() => {
+                  handleSubmit(ele.id);
+                  setCountrieSearch("");
+                }}
               >
                 <SuggestionItem key={ele.id}>
                   <img
                     src={ele.flag}
                     style={{
-                      height: "2rem",
+                      height: "1rem",
                       paddingRight: "1rem",
-                      width: "3rem",
+                      width: "1.5rem",
                     }}
                   />
                   <span>{ele.name}</span>
@@ -158,7 +150,6 @@ export default function NavBar() {
           </SuggestionList>
         )}
       </SearchBar>
-      <div onClick={()=>historyObj.push("activities/createActivity")}>Agregar Actividades</div>
     </HeaderContainer>
   );
 }

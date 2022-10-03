@@ -1,13 +1,13 @@
 import {
-  GET_ALL_COUNTRIES, GET_COUNTRY_DETAIL,
-  /*  CREATE_PRODUCT,
-    DELETE_PRODUCT,
-    GET_PRODUCT_DETAIL, */
+  GET_ALL_ACTIVITIES,
+  GET_ALL_COUNTRIES,
+  GET_COUNTRY_DETAIL,
 } from "../actions";
 
 const initialState = {
   countries: [],
   countryDetail: {},
+  activities: [],
 };
 
 export default function rootReducer(state = initialState, action) {
@@ -17,11 +17,16 @@ export default function rootReducer(state = initialState, action) {
         ...state,
         countries: action.payload,
       };
-      case GET_COUNTRY_DETAIL:
-        return {
-          ...state,
-          countryDetail: action.payload,
-        };
+    case GET_ALL_ACTIVITIES:
+      return {
+        ...state,
+        activities: action.payload,
+      };
+    case GET_COUNTRY_DETAIL:
+      return {
+        ...state,
+        countryDetail: action.payload,
+      };
     default:
       return state;
   }
