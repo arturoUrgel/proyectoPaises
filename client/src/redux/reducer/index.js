@@ -1,4 +1,5 @@
 import {
+  CREATE_ACTIVITY,
   GET_ALL_ACTIVITIES,
   GET_ALL_COUNTRIES,
   GET_COUNTRY_DETAIL,
@@ -27,6 +28,10 @@ export default function rootReducer(state = initialState, action) {
         ...state,
         countryDetail: action.payload,
       };
+      case CREATE_ACTIVITY:
+        return {
+            ...state,
+        };
     default:
       return state;
   }

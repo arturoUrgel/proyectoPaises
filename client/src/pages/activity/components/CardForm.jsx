@@ -1,6 +1,4 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const CardContainer = styled.div`
@@ -39,7 +37,7 @@ const CloseButton = styled.button`
 `;
 
 export default function CardForm({ id, name, flag, onClose }) {
-  const dispatch = useDispatch();
+
   return (
     <CardContainer>
       <CountryName>{id}</CountryName>

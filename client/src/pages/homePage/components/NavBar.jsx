@@ -25,6 +25,7 @@ const SearchButton = styled.button`
   position: absolute;
   top: 0;
   right: 0;
+  
   /* &:hover {
     cursor: pointer;
     background-color: blue;
@@ -32,11 +33,11 @@ const SearchButton = styled.button`
 `;
 
 const Header = styled.div`
-  width: 100%;
+  width: 90%;
   align-items: center;
   justify-content: center;
   display: flex;
-  background-color: #eafa11;
+  background-color: #F0F012;
   flex: 2;
 `;
 const SearchBar = styled.form`
@@ -45,12 +46,14 @@ const SearchBar = styled.form`
   position: absolute;
   left: 25%;
   border-radius: 2px;
+  z-index: 20;
   /* position: relative; */
 `;
 const HeaderContainer = styled.div`
   width: 100%;
   height: 80px;
-  background-color: #eafa11;
+  background-color: #F0F012;
+  
 `;
 const SuggestionList = styled.ul`
   background-color: lightcyan;

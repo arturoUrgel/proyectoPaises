@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
 
     let selectCountries = await Country.findAll({
       where: {
-        name: countries,
+        id: countries,
       },
     });
 

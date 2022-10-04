@@ -4,7 +4,7 @@ import Card from "./Card";
 
 const Data = styled.div`
   flex: 8;
-  background-color: #ec8a1a;
+  /* background-color: #ec8a1a; */
   height: 100%;
   display: flex;
   flex-direction: row;
@@ -23,6 +23,7 @@ export default function Cards({display}) {
             name={country.name}
             continents={country.continents}
             flag={country.flag}
+            population={country.population}
           />
         ))}
     </Data>

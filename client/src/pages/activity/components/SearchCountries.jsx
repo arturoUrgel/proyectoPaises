@@ -80,7 +80,7 @@ export default function SearchCountries({ handleSubmit, charMin }) {
   };
   useEffect(() => {
     handleSuggestion();
-  }, [countrieSearch]);
+  }, [countrieSearch, handleSuggestion]);
 
   const handleSuggestion = () => {
     if (countrieSearch.length >= charMin) {
@@ -137,6 +137,7 @@ export default function SearchCountries({ handleSubmit, charMin }) {
                 <SuggestionItem key={ele.id}>
                   <img
                     src={ele.flag}
+                    alt="Bandera"
                     style={{
                       height: "1rem",
                       paddingRight: "1rem",

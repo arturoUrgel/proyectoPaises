@@ -1,7 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 const SearchInput = styled.input`
@@ -34,11 +33,10 @@ const SearchBar = styled.div`
   width: 80%;
   background-color: white;
   position: absolute;
-  left: 10%;
+  left: 5%;
+  top: 4px;
   border-radius: 2px;
   z-index: ${(props) => props.zIndex};
-
-  /* position: relative; */
 `;
 const HeaderContainer = styled.div`
   width: 400px;
@@ -49,7 +47,7 @@ const SuggestionList = styled.ul`
   list-style-type: none;
   padding: 0;
   max-height: 150px;
-  overflow-y: scroll;
+  overflow-y: auto;
   position: relative;
 `;
 
@@ -106,6 +104,7 @@ export default function SearchInputBar({
 
   return (
     <HeaderContainer>
+      
       <SearchBar
         zIndex={zIndex}
         onFocus={(e) => setInputFocus(true)}

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Cards from "./components/Cards";
 import Filter from "./components/Filter";
@@ -9,26 +8,24 @@ import { getAllCountries } from "../../redux/actions";
 import Pagination from "./components/Pagination";
 
 const HomeContainer = styled.div`
-  width: 100vw;
+  width: 100%;
   height: 100%;
   min-height: 100vh;
-  background-color: #1aec1a;
+  /* background-color: #1aec1a; */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  
 `;
 
 const SearchData = styled.div`
   width: 100%;
   height: 100%;
   min-height: 100vh;
-  background-color: yellow;
-  /*   flex: 8; */
+  background-color: #FAD7A0;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: flex-start
+  align-items: flex-start;
 `;
 
 export default function Home() {
@@ -53,17 +50,16 @@ export default function Home() {
   }, []);
   useEffect(() => {
     filterAll();
-    handlerClick(itemsPerPages,1)
+    handlerClick(itemsPerPages, 1);
   }, [continents, allCountries]);
 
   const onCheckboxClick = (name, checked) => {
     setContinents({ ...continents, [name]: checked });
   };
 
-  const handlerClick = (currentItems,currentPage) => {
-
-    setInitialItem(currentItems)
-    setCurrentPage(currentPage)
+  const handlerClick = (currentItems, currentPage) => {
+    setInitialItem(currentItems);
+    setCurrentPage(currentPage);
     /* window.scrollTo(0, 0) */
   };
 
@@ -89,7 +85,7 @@ export default function Home() {
         <Filter selected={continents} handler={onCheckboxClick} />
         <Cards
           display={displayedCountries.slice(
-            (initialItem - itemsPerPages),
+            initialItem - itemsPerPages,
             initialItem
           )}
         />

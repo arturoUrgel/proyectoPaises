@@ -1,3 +1,4 @@
+import axios from "axios";
 export const GET_ALL_COUNTRIES = "GET_ALL_COUNTRIES"; /* payload */
 export const CREATE_ACTIVITY = "CREATE_ACTIVITY";
 export const GET_ALL_ACTIVITIES = "GET_ALL_ACTIVITIES";
@@ -31,4 +32,18 @@ export const getAllActivities = () => (dispatch) => {
         payload: data,
       })}
     );
+};
+
+export function postActivity(payload) {
+  return async function (dispatch) {
+      try {
+          var json = await axios.post("http://localhost:3001/activities", payload)
+          return dispatch({
+              type: CREATE_ACTIVITY,
+              payload: json.data
+          })
+      } catch (error) {
+          console.log('Error action postActivity ' + error)
+      };
+  };
 };
