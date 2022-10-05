@@ -5,16 +5,244 @@ import {
   getAllActivities,
   getAllCountries,
   postActivity,
+  updateActivity,
 } from "../../redux/actions";
 import CardForm from "./components/CardForm";
 import SearchInputBar from "./components/SearchInputBar";
+
+export function validate(activity) {
+  let errors = {};
+  if (!activity.name) {
+    errors.name = "name is required";
+  } else if (
+    /* (!/^[A-Z\s]{3,15}+$/i.test(activity.name)) */
+    !/^[a-zA-Z]{3,15}$/.test(activity.name)
+  ) {
+    errors.name = "Only letters 3 to 15 characters";
+  }
+
+  if (activity.countries.length === 0) errors.countries = "country is required";
+
+  if (activity.difficulty === "Seleccionar Dificultad") {
+    errors.difficulty = "difficulty is required";
+  }
+  if (!activity.duration) {
+    errors.duration = "duration is required";
+  } else if (0 >= activity.duration || activity.duration > 24) {
+    errors.duration = "must be value between 1 and 24";
+  }
+  if (activity.season === "Seleccionar Temporada") {
+    errors.season = "season is required";
+  }
+
+  return errors;
+}
+
+export default function FormActivity() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAllActivities());
+    dispatch(getAllCountries());
+  }, [dispatch]);
+
+  const allCountries = useSelector((state) => state.countries);
+  const [disable, setDisable] = useState(true);
+  const [activity, setActivity] = useState({
+    name: "",
+    difficulty: "Seleccionar Dificultad",
+    duration: "0",
+    season: "Seleccionar Temporada",
+    countries: [],
+  });
+  const [errors, setErrors] = useState({ name: "" });
+
+  useEffect(() => setDisable(JSON.stringify(errors) !== "{}"), [errors]);
+
+  const handleInputChange = function (e) {
+    if (e.target.name === "countries") {
+      setActivity({
+        ...activity,
+        countries: [...activity.countries, e.target.value],
+      });
+      setErrors(
+        validate({
+          ...activity,
+          countries: [...activity.countries, e.target.value],
+        })
+      );
+    } else {
+      setActivity({
+        ...activity,
+        [e.target.name]: e.target.value,
+      });
+
+      setErrors(
+        validate({
+          ...activity,
+          [e.target.name]: e.target.value,
+        })
+      );
+    }
+  };
+  const onClose = function (e) {
+    e.preventDefault();
+    console.log(e.target.name);
+    setActivity({
+      ...activity,
+      countries: activity.countries.filter((ele) => ele !== e.target.name),
+    });
+    setErrors(
+      validate({
+        ...activity,
+        countries: activity.countries.filter((ele) => ele !== e.target.name),
+      })
+    );
+  };
+
+  const postSubmit = async () => {
+    try {
+      await dispatch(postActivity(activity));
+      
+    } catch (error) {
+      if (error.includes("activity already exists")) {
+        if (window.confirm("Update existing activity"))
+          await dispatch(updateActivity(activity))
+      } else {
+        alert("Please try again");
+      }
+    }
+    alert("Successful");
+
+    setActivity({
+      name: "",
+      difficulty: "Seleccionar Dificultad",
+      duration: "0",
+      season: "Seleccionar Temporada",
+      countries: [],
+    });
+  };
+
+  const handleSubmit = (e) => {
+    if (activity.countries.find((ele) => ele === e)) return;
+    setActivity({
+      ...activity,
+      countries: [...activity.countries, e],
+    });
+    setErrors(
+      validate({
+        ...activity,
+        countries: [...activity.countries, e],
+      })
+    );
+  };
+  return (
+    <FormContainer>
+      <Form>
+        <h1>Crear Actividad</h1>
+        <Container>
+          <TextCointainer>Nombre: </TextCointainer>
+          <InputName
+            type="text"
+            name="name"
+            onChange={handleInputChange}
+            value={activity.name}
+            autoCapitalize="on"
+            autoComplete="off"
+          />
+        </Container>
+        <ErrorContainer>
+          {errors.name && <div>{errors.name}</div>}
+        </ErrorContainer>
+        <Container>
+          <TextCointainer>Paises: </TextCointainer>
+          <SearchInputBar
+            zIndex={20}
+            data={allCountries}
+            charMin={0}
+            handleSubmit={handleSubmit}
+          />
+        </Container>
+        <ErrorContainer>
+          {errors.countries && <div>{errors.countries}</div>}
+        </ErrorContainer>
+        <InputContainer>
+          <TextCointainer>Duracion en hs:</TextCointainer>
+          <div>
+            <InputNumber
+              type="number"
+              name="duration"
+              onChange={handleInputChange}
+              value={activity.duration}
+            />
+            <ErrorContainer>
+              {errors.duration && <div>{errors.duration}</div>}
+            </ErrorContainer>
+          </div>
+        </InputContainer>
+        <div>
+          <select
+            id="season"
+            name="season"
+            onChange={handleInputChange}
+            value={activity.season}
+          >
+            <option>Seleccionar Temporada</option>
+            <option value={"Verano"}>Verano</option>
+            <option value={"Otoño"}>Otoño</option>
+            <option value={"Invierno"}>Invierno</option>
+            <option value={"Primavera"}>Primavera</option>
+          </select>
+        </div>
+        <ErrorContainer>
+          {errors.season && <div>{errors.season}</div>}
+        </ErrorContainer>
+        <div>
+          <select
+            id="difficulty"
+            name="difficulty"
+            onChange={handleInputChange}
+            value={activity.difficulty}
+          >
+            <option>Seleccionar Dificultad</option>
+            <option value={1}>Muy Baja</option>
+            <option value={2}>Baja</option>
+            <option value={3}>Intermedia</option>
+            <option value={4}>Alta</option>
+            <option value={5}>Muy Alta</option>
+          </select>
+        </div>
+        <ErrorContainer>
+          {errors.difficulty && <div>{errors.difficulty}</div>}
+        </ErrorContainer>
+
+        <CardContainer>
+          {activity.countries?.map((ele) => {
+            let data = allCountries.filter((country) => country.id === ele)[0];
+            return (
+              <CardForm
+                key={ele}
+                id={ele}
+                name={data.name}
+                flag={data.flag}
+                onClose={onClose}
+              />
+            );
+          })}
+        </CardContainer>
+        <SubmitButton disabled={disable} onClick={postSubmit}>
+          Crear actividad
+        </SubmitButton>
+      </Form>
+    </FormContainer>
+  );
+}
 
 const FormContainer = styled.div`
   width: 100%;
   height: 100%;
   min-height: calc(100vh - 60px);
- /*  background-color: #FAD7A0; */
-  background-color: #CCD1D1 ;
+  /*  background-color: #FAD7A0; */
+  background-color: #ccd1d1;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -136,219 +364,3 @@ const SubmitButton = styled.button`
     outline: none;
   }
 `;
-
-export function validate(activity) {
-  let errors = {};
-  if (!activity.name) {
-    errors.name = "name is required";
-  } else if /* (!/^[A-Z\s]{3,15}+$/i.test(activity.name)) */
-  (!/^[a-zA-Z]{3,15}$/.test(activity.name))
-   {
-    errors.name = "Only letters 3 to 15 characters";
-  }
-
-  if (activity.countries.length === 0) errors.countries = "country is required";
-
-  if (activity.difficulty === "Seleccionar Dificultad") {
-    errors.difficulty = "difficulty is required";
-  }
-  if (!activity.duration) {
-    errors.duration = "duration is required";
-  } else if (0 >= activity.duration || activity.duration > 24) {
-    errors.duration = "must be value between 1 and 24";
-  }
-  if (activity.season === "Seleccionar Temporada") {
-    errors.season = "season is required";
-  }
-
-  return errors;
-}
-
-export default function FormActivity() {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getAllActivities());
-    dispatch(getAllCountries());
-  }, [dispatch]);
-
-  const allCountries = useSelector((state) => state.countries);
-  /* const allActivities = useSelector((state) => state.activities); */
-
-  const [disable, setDisable] = useState(true);
-
-  const [activity, setActivity] = useState({
-    name: "",
-    difficulty: "Seleccionar Dificultad",
-    duration: "0",
-    season: "Seleccionar Temporada",
-    countries: [],
-  });
-  const [errors, setErrors] = useState({ name: "" });
-
-  useEffect(() => setDisable(JSON.stringify(errors) !== "{}"), [errors]);
-
-  const handleInputChange = function (e) {
-    if (e.target.name === "countries") {
-      setActivity({
-        ...activity,
-        countries: [...activity.countries, e.target.value],
-      });
-      setErrors(
-        validate({
-          ...activity,
-          countries: [...activity.countries, e.target.value],
-        })
-      );
-    } else {
-      setActivity({
-        ...activity,
-        [e.target.name]: e.target.value,
-      });
-
-      setErrors(
-        validate({
-          ...activity,
-          [e.target.name]: e.target.value,
-        })
-      );
-    }
-  };
-  const onClose = function (e) {
-    e.preventDefault();
-    console.log(e.target.name);
-    setActivity({
-      ...activity,
-      countries: activity.countries.filter((ele) => ele !== e.target.name),
-    });
-    setErrors(
-      validate({
-        ...activity,
-        countries: activity.countries.filter((ele) => ele !== e.target.name),
-      })
-    );
-  };
-
-  const handleSubmit = (e) => {
-    if (activity.countries.find((ele) => ele === e)) return;
-    setActivity({
-      ...activity,
-      countries: [...activity.countries, e],
-    });
-    setErrors(
-      validate({
-        ...activity,
-        countries: [...activity.countries, e],
-      })
-    );
-  };
-  return (
-    <FormContainer>
-      <Form>
-        <h1>Crear Actividad</h1>
-        <Container>
-          <TextCointainer>Nombre: </TextCointainer>
-          <InputName
-            type="text"
-            name="name"
-            onChange={handleInputChange}
-            value={activity.name}
-          />
-        </Container>
-        <ErrorContainer>
-          {errors.name && <div>{errors.name}</div>}
-        </ErrorContainer>
-        <Container>
-          <TextCointainer>Paises: </TextCointainer>
-          <SearchInputBar
-            zIndex={20}
-            data={allCountries}
-            charMin={0}
-            handleSubmit={handleSubmit}
-          />
-        </Container>
-        <ErrorContainer>
-          {errors.countries && <div>{errors.countries}</div>}
-        </ErrorContainer>
-        <InputContainer>
-          <TextCointainer>Duracion en hs:</TextCointainer>
-          <div>
-            <InputNumber
-              type="number"
-              name="duration"
-              onChange={handleInputChange}
-              value={activity.duration}
-            />
-            <ErrorContainer>
-              {errors.duration && <div>{errors.duration}</div>}
-            </ErrorContainer>
-          </div>
-        </InputContainer>
-        <div>
-          <select
-            id="season"
-            name="season"
-            onChange={handleInputChange}
-            value={activity.season}
-          >
-            <option>Seleccionar Temporada</option>
-            <option value={"Verano"}>Verano</option>
-            <option value={"Otoño"}>Otoño</option>
-            <option value={"Invierno"}>Invierno</option>
-            <option value={"Primavera"}>Primavera</option>
-          </select>
-        </div>
-        <ErrorContainer>
-          {errors.season && <div>{errors.season}</div>}
-        </ErrorContainer>
-        <div>
-          <select
-            id="difficulty"
-            name="difficulty"
-            onChange={handleInputChange}
-            value={activity.difficulty}
-          >
-            <option>Seleccionar Dificultad</option>
-            <option value={1}>Muy Baja</option>
-            <option value={2}>Baja</option>
-            <option value={3}>Intermedia</option>
-            <option value={4}>Alta</option>
-            <option value={5}>Muy Alta</option>
-          </select>
-        </div>
-        <ErrorContainer>
-          {errors.difficulty && <div>{errors.difficulty}</div>}
-        </ErrorContainer>
-
-        <CardContainer>
-          {activity.countries?.map((ele) => {
-            let data = allCountries.filter((country) => country.id === ele)[0];
-            return (
-              <CardForm
-                key={ele}
-                id={ele}
-                name={data.name}
-                flag={data.flag}
-                onClose={onClose}
-              />
-            );
-          })}
-        </CardContainer>
-        <SubmitButton
-          disabled={disable}
-          onClick={() => {
-            dispatch(postActivity(activity));
-            setActivity({
-              name: "",
-              difficulty: "Seleccionar Dificultad",
-              duration: "0",
-              season: "Seleccionar Temporada",
-              countries: [],
-            });
-          }}
-        >
-          Crear actividad
-        </SubmitButton>
-      </Form>
-    </FormContainer>
-  );
-}

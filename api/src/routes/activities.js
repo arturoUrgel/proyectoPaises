@@ -23,7 +23,43 @@ router.post("/", async (req, res) => {
 
     res.send(await newActivity.addCountry(selectCountries));
   } catch (error) {
-    res.status(400).json({ error: error })
+    res.status(400).json({ error: error.parent.detail });
+  }
+});
+
+router.put("/", async (req, res) => {
+  let { name, difficulty, duration, season, countries } = req.body;
+  try {
+    let selectCountries = await Country.findAll({
+      where: {
+        id: countries,
+      },
+    });
+    let [activity] = await Activity.findOrCreate({
+      where: { name },
+      defaults: {
+        difficulty,
+        duration,
+        season,
+      },
+    });
+    console.log(activity)
+    await Activity.update(
+      {
+        difficulty,
+        duration,
+        season,
+      },
+      {
+        where: {
+          name: name,
+        },
+      }
+    );
+
+    res.send(await activity.addCountry(selectCountries));
+  } catch (error) {
+    res.status(400).json({ error: error });
   }
 });
 
@@ -33,9 +69,11 @@ router.get("/", async (req, res) => {
       include: [Country],
     });
     res.send(respuesta);
-  } catch (error) {console.log("Error postActivity en controller " + error)}
+  } catch (error) {
+    console.log("Error postActivity en controller " + error);
+    res.status(400).json({ error: error });
+  }
 });
-
 
 // Change everyone without a last name to "Doe"
 // await User.update({ lastName: "Doe" }, {
