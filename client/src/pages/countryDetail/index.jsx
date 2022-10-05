@@ -5,6 +5,79 @@ import { getCountryDetails } from "../../redux/actions";
 import styled from "styled-components";
 import ActivityCard from "./components/ActivityCard";
 
+
+
+function CountryDetail(props) {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const countryDetail = useSelector((state) => state.countryDetail);
+
+  useEffect(() => dispatch(getCountryDetails(id)), []);// eslint-disable-line
+
+  return (
+    <DetailContainer>
+      <Details>
+        {countryDetail.name ? (
+          <div>
+            <CountryData>
+              <IdContainer>{countryDetail.id}</IdContainer>
+              <CountryName>{countryDetail.name}</CountryName>
+              <FlagContainer>
+                <Flag src={countryDetail.flag} />
+              </FlagContainer>
+              <InfoContainer>
+                <DataContainer>
+                  <DataTitles>Capital:</DataTitles>
+                  <div>{countryDetail.capital}</div>
+                </DataContainer>
+                <DataContainer>
+                  <DataTitles>Continents:</DataTitles>
+                  <div>{countryDetail.continents}</div>
+                </DataContainer>
+                <DataContainer>
+                  <DataTitles>Subregion:</DataTitles>
+                  <div>{countryDetail.subregion}</div>
+                </DataContainer>
+                <DataContainer>
+                  <DataTitles>Area en km2:</DataTitles>
+                  <div>{countryDetail.area.toLocaleString("es-MX")}</div>
+                </DataContainer>
+                <DataContainer>
+                  <DataTitles>Poblacion:</DataTitles>
+                  <div>{countryDetail.population.toLocaleString("es-MX")}</div>
+                </DataContainer>
+              </InfoContainer>
+            </CountryData>
+            <ActContainer>
+              <ActTitle>Activities</ActTitle>
+              <ActCard>
+                {countryDetail.activities.length > 0 ? (
+                  countryDetail.activities?.map((ele, id) => (
+                    <ActivityCard
+                      key={id}
+                      name={ele.name}
+                      difficulty={ele.difficulty}
+                      season={ele.season}
+                      duration={ele.duration}
+                    />
+                  ))
+                ) : (
+                  <Error>No activities to show</Error>
+                )}
+              </ActCard>
+            </ActContainer>
+          </div>
+        ) : (
+          <div>Pais no existe</div>
+        )}
+      </Details>
+    </DetailContainer>
+  );
+}
+
+export default CountryDetail;
+
+
 const DetailContainer = styled.div`
   width: 100%;
   height: 100%;
@@ -114,73 +187,3 @@ font-weight: 600;
   font-size: 18px;
   align-items: center;
 `;
-
-function CountryDetail(props) {
-  const { id } = useParams();
-  const dispatch = useDispatch();
-  const countryDetail = useSelector((state) => state.countryDetail);
-
-  useEffect(() => dispatch(getCountryDetails(id)), []);
-
-  return (
-    <DetailContainer>
-      <Details>
-        {countryDetail.name ? (
-          <div>
-            <CountryData>
-              <IdContainer>{countryDetail.id}</IdContainer>
-              <CountryName>{countryDetail.name}</CountryName>
-              <FlagContainer>
-                <Flag src={countryDetail.flag} />
-              </FlagContainer>
-              <InfoContainer>
-                <DataContainer>
-                  <DataTitles>Capital:</DataTitles>
-                  <div>{countryDetail.capital}</div>
-                </DataContainer>
-                <DataContainer>
-                  <DataTitles>Continents:</DataTitles>
-                  <div>{countryDetail.continents}</div>
-                </DataContainer>
-                <DataContainer>
-                  <DataTitles>Subregion:</DataTitles>
-                  <div>{countryDetail.subregion}</div>
-                </DataContainer>
-                <DataContainer>
-                  <DataTitles>Area en km2:</DataTitles>
-                  <div>{countryDetail.area.toLocaleString("es-MX")}</div>
-                </DataContainer>
-                <DataContainer>
-                  <DataTitles>Poblacion:</DataTitles>
-                  <div>{countryDetail.population.toLocaleString("es-MX")}</div>
-                </DataContainer>
-              </InfoContainer>
-            </CountryData>
-            <ActContainer>
-              <ActTitle>Activities</ActTitle>
-              <ActCard>
-                {countryDetail.activities.length > 0 ? (
-                  countryDetail.activities?.map((ele, id) => (
-                    <ActivityCard
-                      key={id}
-                      name={ele.name}
-                      difficulty={ele.difficulty}
-                      season={ele.season}
-                      duration={ele.duration}
-                    />
-                  ))
-                ) : (
-                  <Error>No activities to show</Error>
-                )}
-              </ActCard>
-            </ActContainer>
-          </div>
-        ) : (
-          <div>Pais no existe</div>
-        )}
-      </Details>
-    </DetailContainer>
-  );
-}
-
-export default CountryDetail;

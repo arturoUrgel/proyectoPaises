@@ -37,18 +37,18 @@ export default function Home() {
   const orderFilter = useSelector((state) => state.orderFilter);
   const activities = useSelector((state) => state.activities);
   const [displayedCountries, setDisplayedCountries] = useState([]);
-  const [itemsPerPages, setItemsPerPages] = useState(8);
+  const [itemsPerPages, /* setItemsPerPages */] = useState(8);
   const [initialItem, setInitialItem] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     dispatch(getAllActivities());
     dispatch(getAllCountries());
-  }, []);
+  }, [])// eslint-disable-line
   useEffect(() => {
     filterAll();
     handlerClick(itemsPerPages, 1);
-  }, [continents, allCountries, orderFilter]);
+  }, [continents, allCountries, orderFilter])// eslint-disable-line
 
   const onCheckboxClick = (name, checked) => {
     dispatch(updateContFilter({ name, checked }));
@@ -93,7 +93,7 @@ export default function Home() {
   };
 
   return (
-    <HomeContainer>{console.log("activities",activities)}
+    <HomeContainer>
       <SearchData>
         <Filter
           selected={continents}

@@ -43,7 +43,6 @@ router.put("/", async (req, res) => {
         season,
       },
     });
-    console.log(activity)
     await Activity.update(
       {
         difficulty,

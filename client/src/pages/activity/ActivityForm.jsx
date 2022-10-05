@@ -86,7 +86,6 @@ export default function FormActivity() {
   };
   const onClose = function (e) {
     e.preventDefault();
-    console.log(e.target.name);
     setActivity({
       ...activity,
       countries: activity.countries.filter((ele) => ele !== e.target.name),

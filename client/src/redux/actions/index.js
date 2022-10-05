@@ -57,9 +57,11 @@ export function postActivity(payload) {
         payload: json.data,
       });
     } catch (error) {
-      if(error.response.data.error) throw `"${payload.name.toUpperCase()}" activity already exists`
-      throw "Se produjo un error"
-      
+      if (error.response.data.error)
+        throw new Error(
+          `"${payload.name.toUpperCase()}" activity already exists`
+        );
+        throw new Error("Se produjo un error");
     }
   };
 }
@@ -73,9 +75,7 @@ export function updateActivity(payload) {
         payload: json.data,
       });
     } catch (error) {
-      if(error.response.data.error) throw `"${payload.name.toUpperCase()}" activity already exists`
-      throw "Se produjo un error"
-      
+      throw new Error("Se produjo un error");
     }
   };
 }

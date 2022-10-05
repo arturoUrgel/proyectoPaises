@@ -137,7 +137,7 @@ export default function SearchCountries({ handleSubmit, charMin }) {
                 <SuggestionItem key={ele.id}>
                   <img
                     src={ele.flag}
-                    alt="Bandera"
+                    alt={name}
                     style={{
                       height: "1rem",
                       paddingRight: "1rem",

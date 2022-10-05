@@ -3,6 +3,98 @@ import { useEffect } from "react";
 import { useState } from "react";
 import styled from "styled-components";
 
+export default function SearchInputBar({
+  handleSubmit,
+  charMin,
+  data,
+  ph,
+  zIndex,
+}) {
+  const [dataSearch, setDataSearch] = useState("");
+  const [search, setSearch] = useState("");
+  const [inputFocus, setInputFocus] = useState(false);
+
+  const handleInputChange = (e) => {
+    setDataSearch(e.target.value);
+  };
+  useEffect(() => {
+    handleSuggestion();
+  }, [dataSearch]); // eslint-disable-line
+
+  const handleSuggestion = () => {
+    if (dataSearch.length >= charMin) {
+      setSearch(
+        data
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .filter((ele) =>
+            ele.name.toLowerCase().includes(dataSearch.toLowerCase())
+          )
+      );
+    } else {
+      setSearch("");
+    }
+  };
+
+  return (
+    <HeaderContainer>
+      <SearchBar
+        zIndex={zIndex}
+        onFocus={(e) => setInputFocus(true)}
+        onBlur={(e) => setInputFocus(false)}
+        autocomplete="nope"
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+      >
+        <div>
+          <SearchButton>
+            <ion-icon name="Search-sharp"></ion-icon>
+          </SearchButton>
+          <SearchInput
+            type="text"
+            name="searchCountries"
+            placeholder={ph}
+            onChange={handleInputChange}
+            value={dataSearch}
+            autocapitalize="off"
+            autocorrect="off"
+            spellcheck="false"
+            autoComplete="off"
+            tabindex="2"
+          />
+        </div>
+
+        {search.length > 0 && inputFocus && (
+          <SuggestionList>
+            {search.map((ele) => (
+              <div
+                key={ele.id}
+                onMouseDown={() => {
+                  handleSubmit(ele.id);
+                  setDataSearch("");
+                }}
+              >
+                <SuggestionItem key={ele.id}>
+                  <img
+                    alt={"flag"}
+                    src={ele.flag}
+                    style={{
+                      height: "1rem",
+                      paddingRight: "1rem",
+                      width: "1.5rem",
+                    }}
+                  />
+                  <span>{ele.name}</span>
+                </SuggestionItem>
+              </div>
+            ))}
+          </SuggestionList>
+        )}
+      </SearchBar>
+    </HeaderContainer>
+  );
+}
+
 const SearchInput = styled.input`
   height: 2rem;
   background-color: white;
@@ -69,95 +161,3 @@ const SuggestionItem = styled.li`
     content: "◀";
   } */
 `;
-
-export default function SearchInputBar({
-  handleSubmit,
-  charMin,
-  data,
-  ph,
-  zIndex,
-}) {
-  const [dataSearch, setDataSearch] = useState("");
-  const [search, setSearch] = useState("");
-  const [inputFocus, setInputFocus] = useState(false);
-
-  const handleInputChange = (e) => {
-    setDataSearch(e.target.value);
-  };
-  useEffect(() => {
-    handleSuggestion();
-  }, [dataSearch]);
-
-  const handleSuggestion = () => {
-    if (dataSearch.length >= charMin) {
-      setSearch(
-        data
-          .sort((a, b) => a.name.localeCompare(b.name))
-          .filter((ele) =>
-            ele.name.toLowerCase().includes(dataSearch.toLowerCase())
-          )
-      );
-    } else {
-      setSearch("");
-    }
-  };
-
-  return (
-    <HeaderContainer>
-      
-      <SearchBar
-        zIndex={zIndex}
-        onFocus={(e) => setInputFocus(true)}
-        onBlur={(e) => setInputFocus(false)}
-        autocomplete="nope"
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
-      >
-        <div>
-          <SearchButton>
-            <ion-icon name="Search-sharp"></ion-icon>
-          </SearchButton>
-          <SearchInput
-            type="text"
-            name="searchCountries"
-            placeholder={ph}
-            onChange={handleInputChange}
-            value={dataSearch}
-            autocapitalize="off"
-            autocorrect="off"
-            spellcheck="false"
-            autoComplete="off"
-            tabindex="2"
-          />
-        </div>
-
-        {search.length > 0 && inputFocus && (
-          <SuggestionList>
-            {search.map((ele) => (
-              <div
-                key={ele.id}
-                onMouseDown={() => {
-                  handleSubmit(ele.id);
-                  setDataSearch("");
-                }}
-              >
-                <SuggestionItem key={ele.id}>
-                  <img
-                    src={ele.flag}
-                    style={{
-                      height: "1rem",
-                      paddingRight: "1rem",
-                      width: "1.5rem",
-                    }}
-                  />
-                  <span>{ele.name}</span>
-                </SuggestionItem>
-              </div>
-            ))}
-          </SuggestionList>
-        )}
-      </SearchBar>
-    </HeaderContainer>
-  );
-}
