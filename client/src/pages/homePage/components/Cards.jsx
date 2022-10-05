@@ -4,7 +4,6 @@ import Card from "./Card";
 
 const Data = styled.div`
   flex: 8;
-  /* background-color: #ec8a1a; */
   height: 100%;
   display: flex;
   flex-direction: row;

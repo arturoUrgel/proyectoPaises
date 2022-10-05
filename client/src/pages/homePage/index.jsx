@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import NavBar from "./components/NavBar";
 import Cards from "./components/Cards";
 import Filter from "./components/Filter";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,8 +9,8 @@ import Pagination from "./components/Pagination";
 const HomeContainer = styled.div`
   width: 100%;
   height: 100%;
-  min-height: 100vh;
-  /* background-color: #1aec1a; */
+  min-height: calc(100vh - 60px);
+  background-color: #CCD1D1 ;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -19,9 +18,7 @@ const HomeContainer = styled.div`
 
 const SearchData = styled.div`
   width: 100%;
-  height: 100%;
-  min-height: 100vh;
-  background-color: #FAD7A0;
+  height: 100%;  
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -32,8 +29,8 @@ export default function Home() {
   const dispatch = useDispatch();
   const allCountries = useSelector((state) => state.countries);
   const [displayedCountries, setDisplayedCountries] = useState([]);
-  const [itemsPerPages, setItemsPerPages] = useState(9);
-  const [initialItem, setInitialItem] = useState(9);
+  const [itemsPerPages, setItemsPerPages] = useState(8);
+  const [initialItem, setInitialItem] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
   const [continents, setContinents] = useState({
     Africa: true,
@@ -80,7 +77,6 @@ export default function Home() {
 
   return (
     <HomeContainer>
-      <NavBar />
       <SearchData>
         <Filter selected={continents} handler={onCheckboxClick} />
         <Cards

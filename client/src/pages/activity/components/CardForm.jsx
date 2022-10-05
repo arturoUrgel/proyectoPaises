@@ -5,7 +5,8 @@ const CardContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: #b4ec1a;
+  /* background-color: #b4ec1a; */
+  background-color: white;
   height: 65px;
   width: 70px;
   margin: 2px;

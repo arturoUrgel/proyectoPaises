@@ -1,62 +1,5 @@
-// import React from "react";
-// /* import { useDispatch } from "react-redux"; */
-// import styled from "styled-components";
-// import { useHistory } from "react-router-dom";
-
-// const CardContainer = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   background-color: #b4ec1a;
-//   height: 300px;
-//   width: 300px;
-//   border-style: solid;
-//   margin-top: 20px;
-//   border-radius: 10px;
-//   box-shadow: 6px 15px 10px black;
-//   &:hover {
-//     cursor: pointer;
-//     /* box-shadow: 6px 15px 10px blue; */
-//     transform: perspective(2000px) rotateX(0deg) rotateY(10deg) rotateZ(0deg)
-//       translateX(-10px) translateY(0px) translateZ(80px);
-//   }
-// `;
-
-// const CountryName = styled.h3`
-//   flex: 2;
-//   text-align: center;
-// `;
-// const FlagImage = styled.img`
-//   flex: 5;
-//   display: block;
-//   margin-left: auto;
-//   margin-right: auto;
-//   width: 50%;
-//   border-style: solid;
-// `;
-// const Continents = styled.p`
-//   flex: 1;
-// `;
-
-// const Id = styled.span``;
-
-// export default function Card({ id, name, flag, continents, population }) {
-//   /* const dispatch = useDispatch(); */
-//   let historyObj = useHistory();
-//   return (
-//     <CardContainer onClick={() => historyObj.push("/countries/" + id)}>
-//       <Id>{id}</Id>
-//       <CountryName>{name}</CountryName>
-//       <FlagImage src={flag} alt={name} />
-//       <p>{`Continente: ${continents}`}</p>
-//       <div>Poblacion: {population}</div>
-//     </CardContainer>
-//   );
-// }
-//export default CountryDetail;
 import React, { useEffect } from "react";
-
 import { useHistory, useParams } from "react-router-dom";
-
 import styled from "styled-components";
 
 const Details = styled.div`
@@ -74,10 +17,16 @@ const Details = styled.div`
   margin-top: 20px;
   border-radius: 10px;
   z-index: 10;
+  &:hover {
+    cursor: pointer;
+    /* box-shadow: 6px 15px 10px blue; */
+    transform: perspective(2000px) rotateX(0deg) rotateY(10deg) rotateZ(0deg)
+      translateX(-10px) translateY(0px) translateZ(80px);
+  }
 `;
 
 const CountryName = styled.div`
-  width: 240px;
+  width: 220px;
   position: absolute;
   top: 0.2rem;
   right: 5px;
@@ -121,7 +70,7 @@ const InfoContainer = styled.div`
 function Card({ id, name, flag, continents, population }) {
   let historyObj = useHistory();
   return (
-    <Details>
+    <Details onClick={() => historyObj.push("/countries/" + id)}>
       <CountryName>{name}</CountryName>
 
       <FlagContainer>

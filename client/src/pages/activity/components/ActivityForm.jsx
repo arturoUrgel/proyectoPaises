@@ -13,7 +13,7 @@ const FormContainer = styled.div`
   width: 100%;
   height: 100%;
   min-height: calc(100vh - 60px);
- /*  background-color: #FAD7A0; */
+  /* background-color: #FAD7A0; */
   background-color: #CCD1D1 ;
   display: flex;
   flex-direction: column;
@@ -22,14 +22,15 @@ const FormContainer = styled.div`
 `;
 
 const Form = styled.div`
-  width: 480px;
-  height: 550px;
+  width: 500px;
+  height: 600px;
   display: flex;
   flex-direction: column;
+  background-color: white;
   justify-content: center;
   align-items: center;
   border: solid;
-  border-width: 4px;
+  border-width: 40px;
 `;
 
 const CardContainer = styled.div`

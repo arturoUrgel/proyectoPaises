@@ -2,13 +2,28 @@ import React from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
-  margin-top: 1rem;
-  height: 3rem;
+  margin-top: 1.5rem;
+  margin-left: 20%;
+  height: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 2rem;
+  font-weight: 500;
+  font-size: 20px;
 `;
+const ButtonGo = styled.button`
+  background-color: transparent;
+  border: none;
+  font-weight: 500;
+  font-size: 20px;
+  &:hover {
+    cursor: pointer;
+    font-weight: 700;
+  }
+`
+
+
 let maxPage;
 
 export default function Pagination({
@@ -27,25 +42,25 @@ export default function Pagination({
   return (
     <Container>
       {currentPage !== 1 ? (
-        <button name="prev" onClick={handlerLocal}>
-          Prev
-        </button>
+        <ButtonGo name="prev" onClick={handlerLocal}>
+          PREV
+        </ButtonGo>
       ) : (
         false
       )}
       {currentPage <= maxPage ? (
         <div>
           {" "}
-          {currentPage} de {maxPage} paginas{" "}
+          {currentPage} of {maxPage}
         </div>
       ) : (
         false
       )}
 
       {currentPage < maxPage ? (
-        <button name="next" onClick={handlerLocal}>
-          next
-        </button>
+        <ButtonGo name="next" onClick={handlerLocal}>
+          NEXT
+        </ButtonGo>
       ) : (
         false
       )}

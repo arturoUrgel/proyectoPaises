@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 const FilterBar = styled.div`
-  /* background-color: #1aec6a; */
   margin-left: 10px;
   flex: 2;
   height: 100%;

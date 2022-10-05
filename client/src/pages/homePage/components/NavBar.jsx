@@ -2,82 +2,44 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
 
-const SearchInput = styled.input`
-  height: 2rem;
-  background-color: white;
-  width: calc(100% - 10px);
-  border: none;
-  padding: 0;
-  padding-left: 10px;
-  /* position: relative; */
-  &:focus-visible {
-    outline: none;
-  }
-`;
-const SearchButton = styled.button`
-  width: 10%;
-  height: 2rem;
-  border: none;
-  background-color: white;
-  position: absolute;
-  top: 0;
-  right: 0;
-  
-  /* &:hover {
-    cursor: pointer;
-    background-color: blue;
-  } */
-`;
-
-const Header = styled.div`
-  width: 90%;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  background-color: #F0F012;
-  flex: 2;
-`;
-const SearchBar = styled.form`
-  width: 50%;
-  background-color: white;
-  position: absolute;
-  left: 25%;
-  border-radius: 2px;
-  z-index: 20;
-  /* position: relative; */
-`;
-const HeaderContainer = styled.div`
+const BarContainer = styled.div`
   width: 100%;
-  height: 80px;
-  background-color: #F0F012;
-  
-`;
-const SuggestionList = styled.ul`
-  background-color: lightcyan;
-  list-style-type: none;
-  padding: 0;
-`;
-
-const SuggestionItem = styled.li`
-  list-style: none;
-  padding: 10px 5px 10px 10px;
+  height: 60px;
+  background-color: #f0f012;
   position: relative;
-  display: flex;
-  align-items: center;
+`;
 
+const Logo = styled.div`
+  position: absolute;
+  left: 0;
+  top: 8%;
+  width: 10%;
+  height: 50%;
+  margin-left: 10px;
+  font-weight: 600;
+  font-size: 1.4rem;
+`
+
+const LinksTo = styled.button`
+  background-color: transparent;
+  border: none;
+  font-weight: 500;
   &:hover {
     cursor: pointer;
-    background-color: blue;
+    font-weight: 700;
   }
-  /* &::before {
-    position: absolute;
-    top: calc(50% + 0.5em);
-    left: 0.5em;
-    content: "◀";
-  } */
+`;
+
+const ButtonContainer = styled.div`
+  position: absolute;
+  right: 0;
+  top: 25%;
+  width: 20%;
+  height: 50%;
+  margin-right: 5px;
 `;
 
 export default function NavBar() {
@@ -85,13 +47,15 @@ export default function NavBar() {
   const [countrieSearch, setCountrieSearch] = useState("");
   const [search, setSearch] = useState("");
   const [inputFocus, setInputFocus] = useState(false);
-  let historyObj = useHistory();
+  const historyObj = useHistory();
+  const isHomePage = useRouteMatch("/home")
 
   const handleInputChange = (e) => {
     setCountrieSearch(e.target.value);
   };
   useEffect(() => {
     handleSuggestion();
+    
   }, [countrieSearch]);
 
   const handleSuggestion = () => {
@@ -107,9 +71,9 @@ export default function NavBar() {
   };
 
   return (
-    <HeaderContainer>
-      <Header>Listado Paises</Header>
-      <SearchBar
+    <BarContainer>
+      <Logo>Henry Countries</Logo>
+      {isHomePage &&<SearchBar
         onFocus={(e) => setInputFocus(true)}
         onBlur={(e) => setInputFocus(false)}
         autocomplete="nope"
@@ -140,28 +104,84 @@ export default function NavBar() {
 
         {search.length > 0 && inputFocus && (
           <SuggestionList>
-            {search.sort((a, b) => a.name.localeCompare(b.name)).map((ele) => (
-              <div
-                key={ele.id}
-                onMouseDown={() => historyObj.push("/countries/" + ele.id)}
-              >
-                <SuggestionItem key={ele.id}>
-                  <img
-                    src={ele.flag}
-                    style={{
-                      height: "2rem",
-                      paddingRight: "1rem",
-                      width: "3rem",
-                    }}
-                  />
-                  <span>{ele.name}</span>
-                </SuggestionItem>
-              </div>
-            ))}
+            {search
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((ele) => (
+                <div
+                  key={ele.id}
+                  onMouseDown={() => historyObj.push("/countries/" + ele.id)}
+                >
+                  <SuggestionItem key={ele.id}>
+                    <img
+                      src={ele.flag}
+                      style={{
+                        height: "2rem",
+                        paddingRight: "1rem",
+                        width: "3rem",
+                      }}
+                    />
+                    <span>{ele.name}</span>
+                  </SuggestionItem>
+                </div>
+              ))}
           </SuggestionList>
         )}
-      </SearchBar>
-      <div onClick={()=>historyObj.push("activities/createActivity")}>Agregar Actividades</div>
-    </HeaderContainer>
+      </SearchBar>}
+      <ButtonContainer>
+        <LinksTo onClick={() => historyObj.push("/home")}>
+          HOME
+        </LinksTo>
+        <LinksTo onClick={() => historyObj.push("/activities/createActivity")}>
+          CREATE ACTIVITY
+        </LinksTo>
+      </ButtonContainer>
+    </BarContainer>
   );
 }
+
+const SearchInput = styled.input`
+  height: 2rem;
+  background-color: white;
+  width: calc(100% - 10px);
+  border: none;
+  padding: 0;
+  padding-left: 10px;
+  &:focus-visible {
+    outline: none;
+  }
+`;
+const SearchButton = styled.button`
+  width: 10%;
+  height: 2rem;
+  border: none;
+  background-color: white;
+  position: absolute;
+  top: 0;
+  right: 0;
+`;
+const SearchBar = styled.form`
+  width: 50%;
+  background-color: white;
+  position: absolute;
+  left: 25%;
+  top: 10%;
+  border-radius: 2px;
+  z-index: 20;
+`;
+const SuggestionList = styled.ul`
+  background-color: lightcyan;
+  list-style-type: none;
+  padding: 0;
+`;
+const SuggestionItem = styled.li`
+  list-style: none;
+  padding: 10px 5px 10px 10px;
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    cursor: pointer;
+    background-color: blue;
+  }
+`;

@@ -6,20 +6,21 @@ import styled from "styled-components";
 import ActivityCard from "./components/ActivityCard";
 
 const DetailContainer = styled.div`
-  width: 100vw;
+  width: 100%;
   height: 100%;
-  min-height: 100vh;
-  background-color: #1aec1a;
+  min-height: calc(100vh - 60px);
+  /* background-color: #fad7a0; */
+  background-color: #CCD1D1 ;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 `;
 const Details = styled.div`
-  width: 500px;
-  height: 600px;
+  width: 700px;
+  height: 500px;
   position: relative;
-  background-color: #1aec1a;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -28,28 +29,31 @@ const Details = styled.div`
   border-width: 4px;
 `;
 
+const CountryData = styled.div`
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+  justify-content: space-between;
+`;
+
 const IdContainer = styled.div`
   position: absolute;
   top: 0;
   left: 0;
   margin: 0.5rem;
-  font-size: 2rem;
+  font-size: 1.5rem;
 `;
 
 const CountryName = styled.div`
-  width: 450px;
-  position: absolute;
-  top: 2rem;
-  right: 25px;
+  margin-top: 2rem;
   font-size: 3rem;
   text-align: center;
 `;
 
 const FlagContainer = styled.div`
-  width: 450px;
-  position: absolute;
-  top: 6rem;
-  left: 25px;
+  width: 345px;
+
   display: flex;
   justify-content: center;
   height: 150px;
@@ -72,37 +76,43 @@ const DataTitles = styled.div`
 `;
 
 const ActContainer = styled.div`
-  width: 450px;
-  height: 200px;
-  background-color: #fcf1f1;
+  width: 350px;
+  height: 450px;
   position: absolute;
   bottom: 0;
-  left: 25px;
+  right: 5px;
   margin-bottom: 1rem;
-  overflow-y: auto;
 `;
 const ActTitle = styled.div`
   font-size: 1.5rem;
-  width: 450px;
+  width: 100%;
   text-align: center;
   font-weight: 700;
   margin-bottom: 1rem;
   margin-top: 0.5rem;
-
-`
+`;
 
 const ActCard = styled.div`
   display: flex;
+  height: 400px;
+  border: solid;
+  border-width: 1px;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
+  overflow-y: auto;
 `;
 
 const InfoContainer = styled.div`
-  position: absolute;
-  top: 260px;
-  left: 25px;
-  width: 450px;
+  margin-bottom: 1rem;
+`;
+
+const Error = styled.div`
+font-weight: 600;
+  display: flex;
+  height: 100%;
+  font-size: 18px;
+  align-items: center;
 `;
 
 function CountryDetail(props) {
@@ -117,44 +127,51 @@ function CountryDetail(props) {
       <Details>
         {countryDetail.name ? (
           <div>
-            <IdContainer>{countryDetail.id}</IdContainer>
-            <CountryName>{countryDetail.name}</CountryName>
-            <FlagContainer>
-              <img src={countryDetail.flag} />
-            </FlagContainer>
-            <InfoContainer>
-              <DataContainer>
-                <DataTitles>Capital:</DataTitles>
-                <div>{countryDetail.capital}</div>
-              </DataContainer>
-              <DataContainer>
-                <DataTitles>Continents:</DataTitles>
-                <div>{countryDetail.continents}</div>
-              </DataContainer>
-              <DataContainer>
-                <DataTitles>Subregion:</DataTitles>
-                <div>{countryDetail.subregion}</div>
-              </DataContainer>
-              <DataContainer>
-                <DataTitles>Area en km2:</DataTitles>
-                <div>{countryDetail.area.toLocaleString("es-MX")}</div>
-              </DataContainer>
-              <DataContainer>
-                <DataTitles>Poblacion:</DataTitles>
-                <div>{countryDetail.population.toLocaleString("es-MX")}</div>
-              </DataContainer>
-            </InfoContainer>
+            <CountryData>
+              <IdContainer>{countryDetail.id}</IdContainer>
+              <CountryName>{countryDetail.name}</CountryName>
+              <FlagContainer>
+                <Flag src={countryDetail.flag} />
+              </FlagContainer>
+              <InfoContainer>
+                <DataContainer>
+                  <DataTitles>Capital:</DataTitles>
+                  <div>{countryDetail.capital}</div>
+                </DataContainer>
+                <DataContainer>
+                  <DataTitles>Continents:</DataTitles>
+                  <div>{countryDetail.continents}</div>
+                </DataContainer>
+                <DataContainer>
+                  <DataTitles>Subregion:</DataTitles>
+                  <div>{countryDetail.subregion}</div>
+                </DataContainer>
+                <DataContainer>
+                  <DataTitles>Area en km2:</DataTitles>
+                  <div>{countryDetail.area.toLocaleString("es-MX")}</div>
+                </DataContainer>
+                <DataContainer>
+                  <DataTitles>Poblacion:</DataTitles>
+                  <div>{countryDetail.population.toLocaleString("es-MX")}</div>
+                </DataContainer>
+              </InfoContainer>
+            </CountryData>
             <ActContainer>
-              <ActTitle>Actividades</ActTitle>
+              <ActTitle>Activities</ActTitle>
               <ActCard>
-                {countryDetail.activities?.map((ele) => (
-                  <ActivityCard
-                    name={ele.name}
-                    difficulty={ele.difficulty}
-                    season={ele.season}
-                    duration={ele.duration}
-                  />
-                ))}
+                {countryDetail.activities.length > 0 ? (
+                  countryDetail.activities?.map((ele, id) => (
+                    <ActivityCard
+                      key={id}
+                      name={ele.name}
+                      difficulty={ele.difficulty}
+                      season={ele.season}
+                      duration={ele.duration}
+                    />
+                  ))
+                ) : (
+                  <Error>No activities to show</Error>
+                )}
               </ActCard>
             </ActContainer>
           </div>
