@@ -15,6 +15,8 @@ export default function NavBar() {
   const historyObj = useHistory();
   const isHomePage = useRouteMatch("/home");
 
+  
+
   const handleInputChange = (e) => {
     setCountrieSearch(e.target.value);
   };
@@ -33,6 +35,7 @@ export default function NavBar() {
       setSearch("");
     }
   };
+
 
   return (
     <BarContainer>

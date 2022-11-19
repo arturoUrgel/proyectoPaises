@@ -101,11 +101,10 @@ export default function FormActivity() {
   const postSubmit = async () => {
     try {
       await dispatch(postActivity(activity));
-      
     } catch (error) {
       if (error.includes("activity already exists")) {
         if (window.confirm("Update existing activity"))
-          await dispatch(updateActivity(activity))
+          await dispatch(updateActivity(activity));
       } else {
         alert("Please try again");
       }

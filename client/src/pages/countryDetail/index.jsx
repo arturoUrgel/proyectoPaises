@@ -10,7 +10,7 @@ import ActivityCard from "./components/ActivityCard";
 function CountryDetail(props) {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const countryDetail = useSelector((state) => state.countryDetail);
+  const countryDetail = useSelector((state) => state.countryDetail.productDetails);
 
   useEffect(() => dispatch(getCountryDetails(id)), []);// eslint-disable-line
 

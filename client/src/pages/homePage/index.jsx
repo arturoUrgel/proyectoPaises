@@ -87,8 +87,6 @@ export default function Home() {
         filtered = filtered.sort((a, b) => b.population - a.population);
       }
     }
-
-    /* if (orderFilter.az === "des") filtered = filtered.reverse(); */
     setDisplayedCountries(filtered);
   };
 

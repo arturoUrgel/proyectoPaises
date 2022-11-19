@@ -58,10 +58,8 @@ export function postActivity(payload) {
       });
     } catch (error) {
       if (error.response.data.error)
-        throw new Error(
-          `"${payload.name.toUpperCase()}" activity already exists`
-        );
-        throw new Error("Se produjo un error");
+        throw `"${payload.name.toUpperCase()}" activity already exists`;//eslint-disable-line
+        throw "Se produjo un error";//eslint-disable-line
     }
   };
 }
@@ -75,7 +73,7 @@ export function updateActivity(payload) {
         payload: json.data,
       });
     } catch (error) {
-      throw new Error("Se produjo un error");
+      throw "Se produjo un error";//eslint-disable-line
     }
   };
 }

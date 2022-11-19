@@ -21,7 +21,8 @@ const initializedFunc = async ()=>{
       population: ele.population,
     };
   });
-  initial = await Country.bulkCreate(initial);
+
+
   return initial
 }
 
@@ -61,10 +62,12 @@ const nameFilter = async (nameQuery) => {
 router.get("/", async (req, res) => {
   let { name } = req.query;
   try {
-    let dataCountry = await Country.findAll();
+    let dataCountry = await Country.findAll({include: [Activity]});
     if (!dataCountry.length > 0) {
       dataCountry = await initializedFunc()
     }
+    
+
     res.send(name ? await nameFilter(name) : dataCountry);
   } catch (error) {
     res.status(400).json({ error: error });

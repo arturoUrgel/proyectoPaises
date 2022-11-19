@@ -21,7 +21,7 @@ const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
 
 // Syncing all the models at once.
-conn.sync({ force: true }).then(() => {
+conn.sync({ force: false }).then(() => {// Forzamos la creacion de los modelos
   server.listen(3001, () => {
     console.log('Country Server listening at 3001'); // eslint-disable-line no-console
   });

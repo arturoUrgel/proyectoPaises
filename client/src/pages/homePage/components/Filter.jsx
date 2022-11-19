@@ -1,6 +1,85 @@
 import React from "react";
 import styled from "styled-components";
 
+
+
+export default function Filter({
+  handler,
+  selected,
+  handlerSelect,
+  selectState,
+  activityState,
+  handlerActivity,
+}) {
+  const onCheckboxClick = (e) => {
+    handler(e.target.name, e.target.checked);
+  };
+
+  return (
+    <FilterBar>
+      <FilterTitle>Continent Filter</FilterTitle>
+      {Object.keys(selected).map((continent, index) => (
+        <LabelContainer key={index}>
+          <CheckBox
+            name={continent}
+            type="checkbox"
+            checked={selected[continent]}
+            onChange={onCheckboxClick}
+          />
+          <ContinentsFilter>{continent}</ContinentsFilter>
+        </LabelContainer>
+      ))}
+      <FilterTitle>Order </FilterTitle>
+      <LabelContainer>
+        <Order>By</Order>
+        <SelectStyle
+          name="orderBy"
+          value={selectState.orderBy}
+          onChange={(e) => handlerSelect(e.target.name, e.target.value)}
+        >
+          <option value="poputation">Population</option>
+          <option value="name">Name</option>
+        </SelectStyle>
+      </LabelContainer>
+      <LabelContainer>
+        <Order>Sort</Order>
+        <SelectStyle
+          name="az"
+          value={selectState.az}
+          onChange={(e) => handlerSelect(e.target.name, e.target.value)}
+        >
+          <option value="asc">ASC</option>
+          <option value="des">DESC</option>
+        </SelectStyle>
+      </LabelContainer>
+
+      <FilterTitle>Filter Activity </FilterTitle>
+
+      <LabelContainer>
+        <SelectStyle name="activityBy">
+          <option value="All">All</option>
+          {activityState?.map((activity, index) => (
+            <option key={index} value="activity.name">
+              {activity.name}
+            </option>
+          ))}
+        </SelectStyle>
+      </LabelContainer>
+    </FilterBar>
+  );
+}
+
+
+const Order = styled.div`
+  width: 35px;
+  display: flex;
+  align-items: center;
+`
+const SelectStyle = styled.select`
+  background: transparent;
+  border-radius: 5px;
+`
+
 const FilterBar = styled.div`
   margin-left: 10px;
   flex: 2;
@@ -39,69 +118,3 @@ const CheckBox = styled.input`
     color: #99a1a7;
   }
 `;
-
-export default function Filter({
-  handler,
-  selected,
-  handlerSelect,
-  selectState,
-  activityState,
-  handlerActivity,
-}) {
-  const onCheckboxClick = (e) => {
-    handler(e.target.name, e.target.checked);
-  };
-
-  return (
-    <FilterBar>
-      <FilterTitle>Continent Filter</FilterTitle>
-      {Object.keys(selected).map((continent, index) => (
-        <LabelContainer key={index}>
-          <CheckBox
-            name={continent}
-            type="checkbox"
-            checked={selected[continent]}
-            onChange={onCheckboxClick}
-          />
-          <ContinentsFilter>{continent}</ContinentsFilter>
-        </LabelContainer>
-      ))}
-      <FilterTitle>Order </FilterTitle>
-      <LabelContainer>
-        <div>By</div>
-        <select
-          name="orderBy"
-          value={selectState.orderBy}
-          onChange={(e) => handlerSelect(e.target.name, e.target.value)}
-        >
-          <option value="poputation">Population</option>
-          <option value="name">Name</option>
-        </select>
-      </LabelContainer>
-      <LabelContainer>
-        <div>Sort</div>
-        <select
-          name="az"
-          value={selectState.az}
-          onChange={(e) => handlerSelect(e.target.name, e.target.value)}
-        >
-          <option value="asc">ASC</option>
-          <option value="des">DESC</option>
-        </select>
-      </LabelContainer>
-
-      <FilterTitle>Filter Activity </FilterTitle>
-
-      <LabelContainer>
-        <select name="activityBy">
-          <option value="All">All</option>
-          {activityState?.map((activity, index) => (
-            <option key={index} value="activity.name">
-              {activity.name}
-            </option>
-          ))}
-        </select>
-      </LabelContainer>
-    </FilterBar>
-  );
-}
